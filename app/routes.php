@@ -1,17 +1,22 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the Closure to execute when that URI is requested.
-|
-*/
+// Forsíðan gefur okkur index.php
+// Þurfum ekki að nota Blade
+Route::get('/', function() {
 
-Route::get('/', function()
-{
-	return View::make('hello');
+	View::make('index');
+});
+
+// API Routes
+Route::group(['prefix' => 'api'], function() {
+
+	// Gerum bara resource fyrir athugasemdir, hafa þetta stutt
+	Route::resource('comments', 'CommentController',
+		['only' => ['index', 'store', 'destroy']]);
+});
+
+// Bara catch all route sem leyfir Angular að stjórna öllum routes
+App::missing(function($exception) {
+
+	return View::make('index');
 });
